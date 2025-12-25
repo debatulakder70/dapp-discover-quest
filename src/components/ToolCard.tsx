@@ -1,15 +1,16 @@
 import { Tool, chains } from '@/data/tools';
-import { ExternalLink, BadgeCheck, Sparkles, TrendingUp } from 'lucide-react';
+import { ExternalLink, BadgeCheck, Sparkles, TrendingUp, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ToolCardProps {
   tool: Tool;
   index: number;
+  onOpenDetail: (tool: Tool) => void;
 }
 
-export function ToolCard({ tool, index }: ToolCardProps) {
+export function ToolCard({ tool, index, onOpenDetail }: ToolCardProps) {
   const handleClick = () => {
-    window.open(tool.url, '_blank', 'noopener,noreferrer');
+    onOpenDetail(tool);
   };
 
   const toolChains = chains.filter((c) => tool.chains.includes(c.id));
@@ -74,8 +75,8 @@ export function ToolCard({ tool, index }: ToolCardProps) {
             </div>
           </div>
 
-          {/* External link icon */}
-          <ExternalLink className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          {/* Info icon */}
+          <Info className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-all duration-200" />
         </div>
 
         {/* Description */}
