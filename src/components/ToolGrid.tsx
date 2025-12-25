@@ -3,9 +3,10 @@ import { ToolCard } from './ToolCard';
 
 interface ToolGridProps {
   tools: Tool[];
+  onOpenDetail: (tool: Tool) => void;
 }
 
-export function ToolGrid({ tools }: ToolGridProps) {
+export function ToolGrid({ tools, onOpenDetail }: ToolGridProps) {
   if (tools.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
@@ -25,7 +26,7 @@ export function ToolGrid({ tools }: ToolGridProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
       {tools.map((tool, index) => (
-        <ToolCard key={tool.id} tool={tool} index={index} />
+        <ToolCard key={tool.id} tool={tool} index={index} onOpenDetail={onOpenDetail} />
       ))}
     </div>
   );

@@ -4,12 +4,15 @@ import { CategoryTabs } from '@/components/CategoryTabs';
 import { FilterSection } from '@/components/FilterSection';
 import { ToolGrid } from '@/components/ToolGrid';
 import { StatsBar } from '@/components/StatsBar';
-import { tools, Category, Chain } from '@/data/tools';
+import { ToolDetailModal } from '@/components/ToolDetailModal';
+import { tools, Category, Chain, Tool } from '@/data/tools';
 
 const Index = () => {
   const [activeCategory, setActiveCategory] = useState<Category>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedChains, setSelectedChains] = useState<Chain[]>([]);
+  const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const handleChainToggle = (chain: Chain) => {
     setSelectedChains((prev) =>
@@ -117,8 +120,11 @@ const Index = () => {
           </div>
 
           {/* Tool grid */}
-          <ToolGrid tools={filteredTools} />
+          <ToolGrid tools={filteredTools} onOpenDetail={(tool) => { setSelectedTool(tool); setModalOpen(true); }} />
         </main>
+
+        {/* Tool Detail Modal */}
+        <ToolDetailModal tool={selectedTool} open={modalOpen} onOpenChange={setModalOpen} />
 
         {/* Footer */}
         <footer className="border-t border-border/40 mt-16">
