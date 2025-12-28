@@ -5,6 +5,7 @@ import { FilterSection } from '@/components/FilterSection';
 import { ToolGrid } from '@/components/ToolGrid';
 import { StatsBar } from '@/components/StatsBar';
 import { ToolDetailModal } from '@/components/ToolDetailModal';
+import { TrendingSection } from '@/components/TrendingSection';
 import { tools, Category, Chain, Tool } from '@/data/tools';
 
 const Index = () => {
@@ -78,6 +79,9 @@ const Index = () => {
               Discover and access the best DeFi protocols, trading tools, and blockchain analytics — all in one place.
             </p>
           </section>
+
+          {/* Trending */}
+          <TrendingSection onToolClick={(tool) => { setSelectedTool(tool); setModalOpen(true); }} />
 
           {/* Stats */}
           <StatsBar />
