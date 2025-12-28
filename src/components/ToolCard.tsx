@@ -1,6 +1,7 @@
 import { Tool, chains } from '@/data/tools';
-import { ExternalLink, BadgeCheck, Sparkles, TrendingUp, Info } from 'lucide-react';
+import { BadgeCheck, Sparkles, TrendingUp, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { FavoriteButton } from './FavoriteButton';
 
 interface ToolCardProps {
   tool: Tool;
@@ -75,8 +76,10 @@ export function ToolCard({ tool, index, onOpenDetail }: ToolCardProps) {
             </div>
           </div>
 
-          {/* Info icon */}
-          <Info className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-all duration-200" />
+          <div className="flex items-center gap-2">
+            <FavoriteButton toolId={tool.id} size="sm" />
+            <Info className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-all duration-200" />
+          </div>
         </div>
 
         {/* Description */}
