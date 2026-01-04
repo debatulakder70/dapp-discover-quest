@@ -1,7 +1,8 @@
 import { Tool, chains } from '@/data/tools';
-import { BadgeCheck, Sparkles, TrendingUp, Info } from 'lucide-react';
+import { BadgeCheck, Sparkles, TrendingUp, Info, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { FavoriteButton } from './FavoriteButton';
+import { useDefiLlamaData, formatTVL, formatChange } from '@/hooks/useDefiLlamaData';
 
 interface ToolCardProps {
   tool: Tool;
@@ -10,6 +11,8 @@ interface ToolCardProps {
 }
 
 export function ToolCard({ tool, index, onOpenDetail }: ToolCardProps) {
+  const { data: llamaData, loading } = useDefiLlamaData(tool.id);
+  
   const handleClick = () => {
     onOpenDetail(tool);
   };
@@ -86,6 +89,34 @@ export function ToolCard({ tool, index, onOpenDetail }: ToolCardProps) {
         <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
           {tool.description}
         </p>
+
+        {/* TVL and Change Stats */}
+        {(llamaData || loading) && (
+          <div className="flex items-center gap-4 mb-4 text-xs">
+            {loading ? (
+              <div className="flex items-center gap-1 text-muted-foreground">
+                <Loader2 className="w-3 h-3 animate-spin" />
+                <span>Loading...</span>
+              </div>
+            ) : llamaData && (
+              <>
+                <div className="flex items-center gap-1">
+                  <span className="text-muted-foreground">TVL:</span>
+                  <span className="font-semibold text-foreground">{formatTVL(llamaData.tvl)}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-muted-foreground">24h:</span>
+                  <span className={cn(
+                    'font-semibold',
+                    formatChange(llamaData.change_1d).isPositive ? 'text-green-400' : 'text-red-400'
+                  )}>
+                    {formatChange(llamaData.change_1d).text}
+                  </span>
+                </div>
+              </>
+            )}
+          </div>
+        )}
 
         {/* Chains */}
         <div className="flex flex-wrap gap-1.5">
