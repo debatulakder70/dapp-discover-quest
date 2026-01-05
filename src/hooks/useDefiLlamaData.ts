@@ -171,9 +171,12 @@ export function useDefiLlamaData(protocolId: string) {
   return { data, loading, error };
 }
 
-export function formatTVL(tvl: number | string | null | undefined): string {
-  const numTvl = typeof tvl === 'string' ? parseFloat(tvl) : tvl;
-  if (numTvl == null || isNaN(numTvl)) return 'N/A';
+export function formatTVL(tvl: unknown): string {
+  if (tvl === null || tvl === undefined) return 'N/A';
+  
+  const numTvl = typeof tvl === 'string' ? parseFloat(tvl) : Number(tvl);
+  
+  if (typeof numTvl !== 'number' || !Number.isFinite(numTvl)) return 'N/A';
   
   if (numTvl >= 1e9) {
     return `$${(numTvl / 1e9).toFixed(2)}B`;
@@ -187,11 +190,17 @@ export function formatTVL(tvl: number | string | null | undefined): string {
   return `$${numTvl.toFixed(2)}`;
 }
 
-export function formatChange(change: number | string | null | undefined): { text: string; isPositive: boolean } {
-  const numChange = typeof change === 'string' ? parseFloat(change) : change;
-  if (numChange == null || isNaN(numChange)) {
+export function formatChange(change: unknown): { text: string; isPositive: boolean } {
+  if (change === null || change === undefined) {
     return { text: 'N/A', isPositive: true };
   }
+  
+  const numChange = typeof change === 'string' ? parseFloat(change) : Number(change);
+  
+  if (typeof numChange !== 'number' || !Number.isFinite(numChange)) {
+    return { text: 'N/A', isPositive: true };
+  }
+  
   const isPositive = numChange >= 0;
   return {
     text: `${isPositive ? '+' : ''}${numChange.toFixed(2)}%`,
