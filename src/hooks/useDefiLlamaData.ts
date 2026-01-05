@@ -171,23 +171,30 @@ export function useDefiLlamaData(protocolId: string) {
   return { data, loading, error };
 }
 
-export function formatTVL(tvl: number): string {
-  if (tvl >= 1e9) {
-    return `$${(tvl / 1e9).toFixed(2)}B`;
+export function formatTVL(tvl: number | string | null | undefined): string {
+  const numTvl = typeof tvl === 'string' ? parseFloat(tvl) : tvl;
+  if (numTvl == null || isNaN(numTvl)) return 'N/A';
+  
+  if (numTvl >= 1e9) {
+    return `$${(numTvl / 1e9).toFixed(2)}B`;
   }
-  if (tvl >= 1e6) {
-    return `$${(tvl / 1e6).toFixed(2)}M`;
+  if (numTvl >= 1e6) {
+    return `$${(numTvl / 1e6).toFixed(2)}M`;
   }
-  if (tvl >= 1e3) {
-    return `$${(tvl / 1e3).toFixed(2)}K`;
+  if (numTvl >= 1e3) {
+    return `$${(numTvl / 1e3).toFixed(2)}K`;
   }
-  return `$${tvl.toFixed(2)}`;
+  return `$${numTvl.toFixed(2)}`;
 }
 
-export function formatChange(change: number): { text: string; isPositive: boolean } {
-  const isPositive = change >= 0;
+export function formatChange(change: number | string | null | undefined): { text: string; isPositive: boolean } {
+  const numChange = typeof change === 'string' ? parseFloat(change) : change;
+  if (numChange == null || isNaN(numChange)) {
+    return { text: 'N/A', isPositive: true };
+  }
+  const isPositive = numChange >= 0;
   return {
-    text: `${isPositive ? '+' : ''}${change.toFixed(2)}%`,
+    text: `${isPositive ? '+' : ''}${numChange.toFixed(2)}%`,
     isPositive,
   };
 }
